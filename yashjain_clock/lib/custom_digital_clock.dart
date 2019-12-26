@@ -78,12 +78,12 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
       _dateTime = DateTime.now();
       // Update once per minute. If you want to update every second, use the
       // following code.
-      _timer = Timer(
-        Duration(minutes: 1) -
-            Duration(seconds: _dateTime.second) -
-            Duration(milliseconds: _dateTime.millisecond),
-        _updateTime,
-      );
+      // _timer = Timer(
+      //   Duration(minutes: 1) -
+      //       Duration(seconds: _dateTime.second) -
+      //       Duration(milliseconds: _dateTime.millisecond),
+      //   _updateTime,
+      // );
       // Update once per second, but make sure to do it at the beginning of each
       // new second, so that the clock is accurate.
       // _timer = Timer(
@@ -105,8 +105,11 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
     final second = DateFormat('s').format(_dateTime);
     print("second: $second");
     print("timer : ${_timer.toString()}");
-    final fontSize = MediaQuery.of(context).size.width / 4.5;
+    final fontSize = MediaQuery.of(context).size.width / 6.0;
+    final fontSizeTemp = MediaQuery.of(context).size.width / 15.0;
+
     final offset = -fontSize / 7;
+    final temperature = widget.model.temperature;
     final defaultStyle = TextStyle(
       color: colors[_Element.text],
       fontFamily: 'PressStart2P',
@@ -120,6 +123,19 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
       ],
     );
 
+    final defaultStyleTemp = TextStyle(
+      color: colors[_Element.text],
+      fontFamily: 'PressStart2P',
+      fontSize: fontSizeTemp,
+      shadows: [
+        Shadow(
+          blurRadius: 0,
+          color: colors[_Element.shadow],
+          offset: Offset(5, 0),
+        ),
+      ],
+    );
+
     return AspectRatio(
       aspectRatio: 5 / 3,
       child: ClipRRect(
@@ -127,34 +143,54 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
         child: Container(
           color: colors[_Element.background],
           child: Center(
-            child: DefaultTextStyle(
-              style: defaultStyle,
-              child: Stack(
-                children: <Widget>[
-                  // Positioned(left: offset, top: 0, child: Text(hour)),
-                  // Positioned(
-                  //     right: offset, bottom: offset, child: Text(minute)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(hour),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(":"),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text(minute),
-                    ],
-                  )
-                ],
-              ),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _buildTime(hour, minute, defaultStyle),
+                    _buildTemp(temperature, defaultStyleTemp)
+                  ],
+                )
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildGap() {
+    return SizedBox(
+      width: 10.0,
+    );
+  }
+
+  // widget for time
+  Widget _buildTime(
+      final hourValue, final minuteValue, TextStyle timeTextStyle) {
+    Widget time;
+    time = DefaultTextStyle(
+      style: timeTextStyle,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(hourValue),
+          _buildGap(),
+          Text(":"),
+          _buildGap(),
+          Text(minuteValue),
+        ],
+      ),
+    );
+
+    return time;
+  }
+
+  // widget for temperature
+  Widget _buildTemp(final temp, TextStyle tempTextStyle) {
+    return DefaultTextStyle(style: tempTextStyle, child: Text("$temp °C"));
   }
 }
