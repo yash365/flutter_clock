@@ -95,6 +95,7 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
 
   @override
   Widget build(BuildContext context) {
+    final paddingValue = MediaQuery.of(context).size.width/9;
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
@@ -138,25 +139,55 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
 
     return AspectRatio(
       aspectRatio: 5 / 3,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(100.0),
-        child: Container(
-          color: colors[_Element.background],
-          child: Center(
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50.0),
+            child: Container(
+              color: colors[_Element.background],
+              child: Center(
+                child: Stack(
                   children: <Widget>[
-                    _buildTime(hour, minute, defaultStyle),
-                    _buildTemp(temperature, defaultStyleTemp)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        _buildTime(hour, minute, defaultStyle, paddingValue),
+                        _buildTemp(temperature, defaultStyleTemp)
+                      ],
+                    )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
           ),
-        ),
+          _mediumButton(),
+          _smallButton()
+        ],
+      ),
+    );
+  }
+
+  Widget _mediumButton() {
+    return ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+          child: Container(
+        width: 15.0,
+        height: 60.0,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget _smallButton() {
+    return ClipRRect(
+        borderRadius: BorderRadius.circular(100.0),
+          child: Container(
+        width: 15.0,
+        height: 30.0,
+        color: Colors.yellowAccent,
       ),
     );
   }
@@ -169,20 +200,23 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
 
   // widget for time
   Widget _buildTime(
-      final hourValue, final minuteValue, TextStyle timeTextStyle) {
+      final hourValue, final minuteValue, TextStyle timeTextStyle, double padding) {
     Widget time;
     time = DefaultTextStyle(
       style: timeTextStyle,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(hourValue),
-          _buildGap(),
-          Text(":"),
-          _buildGap(),
-          Text(minuteValue),
-        ],
+      child: Container(
+        padding: EdgeInsets.all(padding),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(hourValue),
+            _buildGap(),
+            Text(":"),
+            _buildGap(),
+            Text(minuteValue),
+          ],
+        ),
       ),
     );
 
