@@ -95,7 +95,7 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
 
   @override
   Widget build(BuildContext context) {
-    final paddingValue = MediaQuery.of(context).size.width/9;
+    final paddingValue = MediaQuery.of(context).size.width / 9;
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
@@ -106,8 +106,8 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
     final second = DateFormat('s').format(_dateTime);
     print("second: $second");
     print("timer : ${_timer.toString()}");
-    final fontSize = MediaQuery.of(context).size.width / 6.0;
-    final fontSizeTemp = MediaQuery.of(context).size.width / 15.0;
+    final fontSize = MediaQuery.of(context).size.width / 10.0;
+    final fontSizeTemp = MediaQuery.of(context).size.width / 17.0;
 
     final offset = -fontSize / 7;
     final temperature = widget.model.temperature;
@@ -119,7 +119,7 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
         Shadow(
           blurRadius: 0,
           color: colors[_Element.shadow],
-          offset: Offset(10, 0),
+          offset: Offset(7, 0),
         ),
       ],
     );
@@ -132,48 +132,51 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
         Shadow(
           blurRadius: 0,
           color: colors[_Element.shadow],
-          offset: Offset(5, 0),
+          offset: Offset(4, 0),
         ),
       ],
     );
 
-    return AspectRatio(
-      aspectRatio: 5 / 3,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50.0),
-            child: Container(
-              color: colors[_Element.background],
-              child: Center(
-                child: Stack(
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        _buildTime(hour, minute, defaultStyle, paddingValue),
-                        _buildTemp(temperature, defaultStyleTemp)
-                      ],
-                    )
-                  ],
+    return Scaffold(
+      backgroundColor: Colors.grey[350],
+          body: AspectRatio(
+        aspectRatio: 5 / 3,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50.0),
+              child: Container(
+                color: colors[_Element.background],
+                child: Center(
+                  child: Stack(
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          _buildTime(hour, minute, defaultStyle, paddingValue),
+                          _buildTemp(temperature, defaultStyleTemp)
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          _mediumButton(),
-          _smallButton()
-        ],
+            _mediumButton(),
+            _smallButton()
+          ],
+        ),
       ),
     );
   }
 
   Widget _mediumButton() {
     return ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-          child: Container(
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
         width: 15.0,
         height: 60.0,
         color: Colors.black,
@@ -183,8 +186,8 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
 
   Widget _smallButton() {
     return ClipRRect(
-        borderRadius: BorderRadius.circular(100.0),
-          child: Container(
+      borderRadius: BorderRadius.circular(100.0),
+      child: Container(
         width: 15.0,
         height: 30.0,
         color: Colors.yellowAccent,
@@ -199,8 +202,8 @@ class _CustomDigitalClockState extends State<CustomDigitalClock> {
   }
 
   // widget for time
-  Widget _buildTime(
-      final hourValue, final minuteValue, TextStyle timeTextStyle, double padding) {
+  Widget _buildTime(final hourValue, final minuteValue, TextStyle timeTextStyle,
+      double padding) {
     Widget time;
     time = DefaultTextStyle(
       style: timeTextStyle,
